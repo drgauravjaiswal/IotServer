@@ -2,23 +2,29 @@ const express = require('express');
 const router = express.Router();
 const mongo = require('mongodb');
 const monk = require('monk');
-const db =  monk('localhost:27017/mongodb_app');
+const db =  monk('localhost:27017/test');
 
 
 router.get('/', function(req,res){
-  db.driver.collectionNames(function(e, names){
-  	console.log('app.get(\'/api\') called');
+  db.driver.collectionNames(function(e,names){
     res.json(names);
   })
+  
 });
 
 router.get('/:name', function(req,res){
   console.log('app.get(\'/api/:name\') called with ' + req.params.name);
   
   var collection = db.get(req.params.name);
-  var setting = {sort : {timestamp : -1}};
-  
-  collection.find({}, setting, function(e,docs){
+  var elements = parseInt(req.query.elements);
+  if(!isNaN(elements)){
+  	var setting = {sort : {timestamp : -1}, limit : elements};
+  	//console.log("Elements : " + elements);
+  }else{
+  	var setting = {sort : {timestamp : -1}};
+  }
+  //console.log(collection);
+  collection.find({},setting, function(e,docs){
   	if(e) console.log('Error : ' + e);
     res.json(docs);
   })

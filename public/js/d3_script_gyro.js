@@ -62,7 +62,7 @@ function drawSimpleSvg(data) {
 	var axisLabel = ["x", "y", "z"];
 	axisLabel.forEach(item=>{
 		// Mapping
-		extent = d3.extent(data, function(d){return d['acc_'+item]});
+		extent = d3.extent(data, function(d){return d['gyro_'+item]});
 		scale = d3.scale.linear()
 						.range([height-margin, margin])
 						.domain([-20,20]);
@@ -78,13 +78,13 @@ function drawSimpleSvg(data) {
 		// Draw circles
 		d3.selectAll("circle." + item)
 			.attr("cx", function(d){return time_scale(d.timestamp)})
-			.attr("cy", function(d){return scale(d['acc_'+item])})
+			.attr("cy", function(d){return scale(d['gyro_'+item])})
 			.attr("r", 3);
 
 		// Path
 		var line = d3.svg.line()
 			.x(function(d){return time_scale(d.timestamp)})
-			.y(function(d){return scale(d['acc_'+item])});
+			.y(function(d){return scale(d['gyro_'+item])});
 		d3.select("svg")
 			.append("path")
 			.attr("d", line(data))

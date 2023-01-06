@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>D3 Accelerometer Visualization</title>
+	<style>
+		circle.x{
+			stroke:black;
+			stroke-width:0.5px;
+			fill:Red;
+			opacity:0.6;
+		}
+		circle.y{
+			stroke:black;
+			stroke-width:0.5px;
+			fill:Green;
+			opacity:0.6;
+		}
+		circle.z{
+			stroke:black;
+			stroke-width:0.5px;
+			fill:Blue;
+			opacity:0.6;
+		}
+		.axis {
+			font-family: arial;
+			font-size:0.6em;
+		}
+		path {
+			fill:none;
+			stroke:black;
+			stroke-width:2px;
+		}
+		path.x{ stroke:Red; }
+		path.y{ stroke:Green; }
+		path.z{ stroke:Blue; }
+	</style>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="js/d3_script.js"></script>
+</head>
+
+<body>
+	<header>
+		<section id="menu">
+			<a href="/" id="m_home">Live data Table</a>
+			<a href="/d3-accelerometer.html" id="m_canvas">Accelerometer Data</a>
+			<a href="/d3-gyrosensor.html" id="m_d3">Gyroscope Data</a>
+		</section>
+	</header>
+	<button id="startBtn" onclick="openCam()">Open Webcam</button>
+   <br/><br/>
+   <video id="videoCam" style="height: 200px;"></video>
+   <script>
+      function openCam(){
+         let All_mediaDevices=navigator.mediaDevices
+         if (!All_mediaDevices || !All_mediaDevices.getUserMedia) {
+            console.log("getUserMedia() not supported.");
+            return;
+         }
+         All_mediaDevices.getUserMedia({
+            audio: false,
+            video: true
+         })
+         .then(function(vidStream) {
+            var video = document.getElementById('videoCam');
+            if ("srcObject" in video) {
+               video.srcObject = vidStream;
+            } else {
+               video.src = window.URL.createObjectURL(vidStream);
+            }
+            video.onloadedmetadata = function(e) {
+               video.play();
+            };
+         })
+         .catch(function(e) {
+            console.log(e.name + ": " + e.message);
+         });
+      }
+   </script>
+</body>
+</html>
